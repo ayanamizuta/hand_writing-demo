@@ -2,7 +2,7 @@
 a browser demonstration of hand writing recognition
 
 ```bash
-python train.py > param.txt
+python train.py
 python demo.py
 ```
 
