@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>browser demo</title>
+    <style>
+      #canvas {
+        background: #808080;
+      }
+    </style>
+  </head>
+    <canvas id="canvas" width="224" height="224"></canvas>
+    <script>
+      var x = 0;
+      var y = 0;
+      var timer;
+      var canvas = document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+      function throttle(targetFunc, time) {
+        var _time = time || 1;
+        clearTimeout(this.timer);
+        this.timer = setTimeout(function () {
+          targetFunc();
+        }, _time);
+      }
+
+      function draw(e) {
+        throttle(function() {
+          ctx.fillRect( e.clientX, e.clientY, 10, 10)
+        }, 1);
+      }
+      
+      function onMouseMove(e) {
+        if(e.shiftKey == true)
+          draw(e);
+      }
+      
+      function init(){
+        alert("browser_demo")
+        canvas.addEventListener('mousemove', onMouseMove, false);
+      }
+      
+      function clear(){
+        canvas.clearRect(0,0,224,224);
+      }
+
+      function submit(){
+      var f = document.forms["myForm"];
+      var str = ""
+      var imageData = ctx.getImageData(0,0,224,224);
+      var data = imageData.data;
+      for(var i = 0, len = imageData.width * imageData.height; i<len; i++){	      
+	if((data[i*4] + data[i*4+1] + data[i*4+2] + data[i*4+3]) != 0)
+  	 str += "1"
+	else
+	 str += "0"
+      }
+      var input = document.createElement('input');
+      input.setAttribute('type', 'hidden');
+      input.setAttribute('name', 'write_down');
+      input.setAttribute('value', str);
+      f.appendChild(input);
+      f.submit();
+      return true;
+      }
+      </script>
+  <body onload="init();">
+  <ul>
+    <button onclick="clear();" >Reset</button>
+    <form name="myForm" action="/demo.html" method="POST">
+      <input type="button" value="Judge" onclick="submit();">
+    </form>
+  </ul>
+    <h3>What is this:</h3>
+    <ul>
+      <li>[0-9]の数字1文字の手書き識別をします</li>
+      <li>MNISTのデータを用いています</li>
+    </ul>
+    <h3>Usage:</h3>
+    <ul>
+      <li>Shift+mousemove: writing</li>
+    </ul>
+  </body>
+</html>
