@@ -27,7 +27,7 @@
 
       function draw(e) {
         throttle(function() {
-          ctx.fillRect( e.clientX, e.clientY, 10, 10)
+          ctx.fillRect( e.clientX, e.clientY, 20, 20)
         }, 1);
       }
       
@@ -53,8 +53,7 @@
       ctx.putImageData(imageData,0,0)						      
       }
 
-      function submit(){
-      var f = document.forms["myForm"];
+      function submit_data(){
       var str = ""
       var imageData = ctx.getImageData(0,0,224,224);
       var data = imageData.data;
@@ -64,19 +63,17 @@
 	else
 	 str += "0"
       }
-      var input = document.createElement('input');
-      input.setAttribute('type', 'hidden');
-      input.setAttribute('name', 'write_down');
-      input.setAttribute('value', "abc");
-      f.appendChild(input);
+      var f = document.forms["myForm"];
+      f["write_down"].value = str
       f.submit();
       }
       </script>
   <body onload="init();">
   <ul>
     <button onclick="clear_img();" >Clear</button>
-    <form name="myForm" action="/demo.html" method="POST">
-      <input type="button" value="Judge" onclick="submit();">
+    <form name="myForm" id="myForm" action="/demo.html" method="POST">
+      <input type="hidden" name="write_down" value="">
+      <input type="submit" value="Judge" onclick="submit_data();">
     </form>
   </ul>
     <h3>What is this:</h3>
