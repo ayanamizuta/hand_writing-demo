@@ -53,8 +53,8 @@
       ctx.putImageData(imageData,0,0)						      
       }
 
-      function submit_data(){
-      var str = ""
+      function submit_data(net){
+      var str = "";
       var imageData = ctx.getImageData(0,0,224,224);
       var data = imageData.data;
       for(var i = 0, len = imageData.width * imageData.height; i<len; i++){	      
@@ -64,6 +64,7 @@
 	 str += "0"
       }
       var f = document.forms["myForm"];
+      f["network"].value = net
       f["write_down"].value = str
       f.submit();
       }
@@ -72,8 +73,10 @@
   <ul>
     <button onclick="clear_img();" >Clear</button>
     <form name="myForm" id="myForm" action="/demo.html" method="POST">
+      <input type="hidden" name="network" value="nn">
       <input type="hidden" name="write_down" value="">
-      <input type="submit" value="Judge" onclick="submit_data();">
+      <input type="submit" value="Judge by NN" onclick="submit_data('nn');">
+      <input type="submit" value="Judge by CNN" onclick="submit_data('cnn');">
     </form>
   </ul>
     <h3>What is this:</h3>

@@ -1,8 +1,14 @@
 # coding: utf-8
+import sys
+sys.path.append('./common')
+sys.path.append('./network')
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from mnist import load_mnist
+from trainer import Trainer
 from two_layer_net import TwoLayerNet
+from simple_convnet import SimpleConvNet
 
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
@@ -39,7 +45,7 @@ for i in range(iters_num):
         test_acc_list.append(test_acc)
         print("train acc, test acc | " + str(train_acc) + ", " + str(test_acc))
 
-f = open('param.txt','w')
+f = open('param.txt','w+')
 
 for i,x in enumerate(network.params['W1']):
     if i != 0:
@@ -66,3 +72,19 @@ for i,x in enumerate(network.params['b2']):
 f.write("\n")
 
 f.close()
+
+(x_train, t_train), (x_test, t_test) = load_mnist(flatten=False)
+
+max_epochs = 10
+
+network = SimpleConvNet(input_dim=(1,28,28), 
+                        conv_param = {'filter_num': 30, 'filter_size': 5, 'pad': 0, 'stride': 1},
+                        hidden_size=100, output_size=10, weight_init_std=0.01)
+                        
+trainer = Trainer(network, x_train, t_train, x_test, t_test,
+                  epochs=max_epochs, mini_batch_size=100,
+                  optimizer='Adam', optimizer_param={'lr': 0.001},
+                  evaluate_sample_num_per_epoch=10000)
+trainer.train()
+
+network.save_params("params.pkl")
