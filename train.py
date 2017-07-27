@@ -75,7 +75,7 @@ f.close()
 
 (x_train, t_train), (x_test, t_test) = load_mnist(flatten=False)
 
-max_epochs = 10
+max_epochs = 20
 
 network = SimpleConvNet(input_dim=(1,28,28), 
                         conv_param = {'filter_num': 30, 'filter_size': 5, 'pad': 0, 'stride': 1},
